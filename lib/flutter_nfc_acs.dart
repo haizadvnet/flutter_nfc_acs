@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_nfc_acs/models.dart';
 
@@ -26,41 +25,36 @@ class FlutterNfcAcs {
   static Stream<String>? _cards;
   static Stream<int>? _batteryStatus;
 
-  static Stream<List<AcsDevice>> get devices {
+  static Stream<List<AcsDevice>>? get devices {
     _devices ??= _devicesChannel.receiveBroadcastStream().map<List<AcsDevice>>((data) {
-      return (data as Map<dynamic, dynamic>).entries.map<AcsDevice>((m) {
-        print(m.key);
-        print(m.value);
-        print('--------------');
-        return AcsDevice(m.key, name: m.value);
-      }).toList();
+      return (data as Map<dynamic, dynamic>).entries.map<AcsDevice>((m) => AcsDevice(m.key, m.value)).toList();
     });
 
-    return _devices!;
+    return _devices;
   }
 
-  static Stream<String> get connectionStatus {
+  static Stream<String>? get connectionStatus {
     _connectionStatus ??= _deviceStatusChannel.receiveBroadcastStream().map<String>((data) {
       return data as String;
     });
 
-    return _connectionStatus!;
+    return _connectionStatus;
   }
 
-  static Stream<String> get cards {
+  static Stream<String>? get cards {
     _cards ??= _deviceCardChannel.receiveBroadcastStream().map<String>((data) {
       return data as String;
     });
 
-    return _cards!;
+    return _cards;
   }
 
-  static Stream<int> get batteryStatus {
+  static Stream<int>? get batteryStatus {
     _batteryStatus ??= _deviceBatteryChannel.receiveBroadcastStream().map<int>((data) {
       return data as int;
     });
 
-    return _batteryStatus!;
+    return _batteryStatus;
   }
 
   static Future<void> connect(String address) {
